@@ -2,16 +2,19 @@ import express from 'express';
 import cors from 'cors';
 import mysql from 'mysql2/promise';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 const db = await mysql.createConnection({
-    host:'localhost',
-    user:'root',
-    password:'admin123',
-    database:'authforge'
+    uri: process.env.DATABASE_URL
+    // host:'localhost',
+    // user:'root',
+    // password:'admin123',
+    // database:'authforge'
 });
 console.log('Connected to MySQL database successfully');
 
@@ -57,6 +60,21 @@ app.post('/api/login',async(req,res)=>{
         console.error('Error occurred while logging in user:', error);
         return res.status(500).json({error: 'Internal server error'});
 
+    }
+});
+
+app.get('/api/dashboard',async (req,res)=>{
+    const authHeader = req.headers.authorization;
+    if(!authHeader){
+        return res.status(401).json({error: 'Authorization header missing'});
+    }
+    const token = authHeader.split(' ')[1];
+    try {
+        const decoded = jwt.verify(token,'secret-123');
+        res.status(200).json({message: 'Welcome to the dashboard', user: decoded.email});
+    } catch (error) {
+        console.error('Error occurred while verifying token:', error);
+        return res.status(401).json({error: 'Invalid or expired token'});
     }
 })
 
