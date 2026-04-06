@@ -10,7 +10,16 @@ app.use(cors());
 app.use(express.json());
 
 const db = await mysql.createConnection({
-    uri: process.env.DATABASE_URL
+    // uri: process.env.DATABASE_URL
+  host: "maglev.proxy.rlwy.net",
+  port: 16102,
+  user: "root",
+  password: "aCeEnqdplThwFuQRLVkzDOaDpmadipcK",
+  database: "railway",
+  ssl: {
+    rejectUnauthorized: false,
+  },
+
     // host:'localhost',
     // user:'root',
     // password:'admin123',
