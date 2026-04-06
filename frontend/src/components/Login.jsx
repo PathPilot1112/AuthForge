@@ -1,30 +1,41 @@
-import {useState} from "react";
+import { useState } from "react";
 import { Link } from "react-router";
+import toast, { Toaster } from "react-hot-toast";
 const Login = () => {
-const[email, setEmail] = useState('');
-const[password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    async function handleLogin(e){
-        e.preventDefault();
-        const res = await fetch('http://localhost:3001/api/login',{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email,
-                password
-            }),
-        });
-        const data = await res.json();
-        console.log('User logged in successfully:', data);
-
+  async function handleLogin(e) {
+      e.preventDefault();
+    if (!email || !password) {
+      toast.error("All fields are required");
+      return;
     }
+    const res = await fetch("http://localhost:3001/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+    const data = await res.json();
+    if(!res.ok){
+        toast.error(data.error || 'Login failed');
+        return;
+    }
+    toast.success("Logged In successfully");
+    console.log("User logged in successfully:", data);
+  }
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-indigo-950 via-purple-950 to-black text-white flex flex-col">
-
       <div className="p-6">
-        <h1 className="text-6xl tracking-wider font-bold font-['Bebas_Neue']" style={{ fontFamily: "Bebas Neue" }}>
+        <h1
+          className="text-6xl tracking-wider font-bold font-['Bebas_Neue']"
+          style={{ fontFamily: "Bebas Neue" }}
+        >
           AuthForge
         </h1>
       </div>
@@ -57,25 +68,26 @@ const[password, setPassword] = useState('');
               />
             </div>
 
-
             <button
               type="submit"
               className="mt-4 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:scale-[1.02] hover:shadow-lg transition-all duration-200 font-semibold"
             >
               Login
             </button>
-
           </form>
-
 
           <p className="text-center text-sm text-gray-400 mt-6">
             No account? No problem{" "}
-            <Link to="/signup"><span className="text-indigo-400 hover:underline cursor-pointer">
-              Signup
-            </span></Link>
+            <Link to="/signup">
+              <span className="text-indigo-400 hover:underline cursor-pointer">
+                Signup
+              </span>
+            </Link>
           </p>
-
         </div>
+      </div>
+      <div>
+        <Toaster/>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import {useState} from "react";
 import { Link } from "react-router";
+import toast, { Toaster } from "react-hot-toast";
 const Signup = () => {
 const[name, setName] = useState('');
 const[email, setEmail] = useState('');
@@ -7,6 +8,13 @@ const[password, setPassword] = useState('');
 
     async function handleSignup(e){
         e.preventDefault();
+        if(!name || !email || !password){
+            toast.error('All fields are required',{
+                duration:4000,
+            });
+
+            return;
+        }
         const res = await fetch('http://localhost:3001/api/signup',{
             method: 'POST',
             headers: {
@@ -19,7 +27,16 @@ const[password, setPassword] = useState('');
             }),
         });
         const data = await res.json();
+        if(!res.ok){
+            toast.error(data.error || 'Signup Failed');
+            return;
+        }
+        toast.success('User registered successfully');
         console.log('User registered successfully:', data);
+        setName('');
+        setEmail('');
+        setPassword('');
+
 
     }
   return (
@@ -88,8 +105,13 @@ const[password, setPassword] = useState('');
             </span></Link>
           </p>
 
+
+
         </div>
       </div>
+             <div>
+            <Toaster/>
+          </div>
     </div>
   );
 };
