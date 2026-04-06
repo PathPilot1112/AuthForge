@@ -12,7 +12,7 @@ const Login = () => {
       toast.error("All fields are required");
       return;
     }
-    const res = await fetch("http://localhost:3001/api/login", {
+    const res = await fetch("https://authforge-ffjm.onrender.com/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

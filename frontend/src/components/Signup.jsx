@@ -15,7 +15,7 @@ const[password, setPassword] = useState('');
 
             return;
         }
-        const res = await fetch('http://localhost:3001/api/signup',{
+        const res = await fetch('https://authforge-ffjm.onrender.com/api/signup',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

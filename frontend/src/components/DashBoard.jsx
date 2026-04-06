@@ -9,7 +9,7 @@ const DashBoard = () => {
     navigate("/login");
   }
   async function fetchDashboardData() {
-    const res = await fetch("http://localhost:3001/api/dashboard", {
+    const res = await fetch("https://authforge-ffjm.onrender.com/api/dashboard", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
